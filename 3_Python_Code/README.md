@@ -2,16 +2,13 @@
 
 Implementación modular y autónoma en **Python** del flujo de estimación de atenuación anelástica ($Q$) mediante descomposición espectral *Matching Pursuit* (MPD) y compensación estabilizada de amplitudes (Wang).
 
-> [!NOTE]
-> **Anonimización de Datos:** Todos los nombres de proyectos, áreas geográficas (campo original), líneas sísmicas 2D y pozos han sido completamente anonimizados y reemplazados por identificadores genéricos (`Survey_Area`, `Seismic_Line_A`, `Well_01`, etc.) para proteger la confidencialidad de la información.
-
 ---
 
 ## 📁 Estructura del Módulo Python
 
 ```text
 3_Python_Code/
-├── config.py             # Dataclasses de configuración (parámetros geofísicos, rangos y anonimización)
+├── config.py             # Dataclasses de configuración (parámetros geofísicos, rangos y muestreo)
 ├── io_seismic.py         # Carga/guardado de matrices .mat, SEG-Y y generador de trazas sintéticas
 ├── morlet_dictionary.py  # Síntesis vectorizada del diccionario 3D de ondículas de Morlet
 ├── matching_pursuit.py   # Algoritmo MPD con atributos instantáneos de Hilbert y distribución TF
@@ -70,7 +67,7 @@ python3 -m unittest 3_Python_Code/test_pipeline.py
 
 | Fase del Flujo | Script Original en MATLAB | Módulo Equivalente en Python |
 | :--- | :--- | :--- |
-| **Configuración** | Constantes dispersas en scripts | `config.py` (`dataclasses` centralizadas y anonimizadas) |
+| **Configuración** | Constantes dispersas en scripts | `config.py` (`dataclasses` centralizadas y estructuradas) |
 | **Paso 1: I/O de Datos** | `1_Carga_Datos.m` | `io_seismic.py` (`load_mat_seismic`, `load_segy_traces`, `generate_synthetic_seismic_trace`) |
 | **Paso 2: Diccionario** | `2_Diccionario de Ondiculas.m` | `morlet_dictionary.py` (`build_morlet_dictionary`, `compute_morlet_atom`) |
 | **Paso 3: MPD y TF** | `3_Implementacion_MPD_Quifa18.m` | `matching_pursuit.py` (`decompose_trace_mpd`, `compute_time_frequency_distribution`) |

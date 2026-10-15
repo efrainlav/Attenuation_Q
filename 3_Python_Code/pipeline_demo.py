@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # ==============================================================================
 # Script Demostrativo End-to-End: Pipeline Completo de Estimación de Q y MPD
-# Ejecuta los pasos 1 al 5 de forma autónoma con datos sintéticos y/o reales anonimizados.
+# Ejecuta los pasos 1 al 5 de forma autónoma con datos sintéticos y/o reales.
 # ==============================================================================
 
 import os
@@ -29,18 +29,17 @@ from q_estimation import estimate_q_from_tfdist, plot_q_inversion_results
 def run_demo():
     print("=" * 80)
     print("  PIPELINE DE ESTIMACIÓN DEL FACTOR DE CALIDAD SÍSMICO (Q) - VERSIÓN PYTHON")
-    print("  (Levantamiento y Líneas Sísmicas Anonimizadas)")
     print("=" * 80)
     
     output_dir = os.path.join(CURRENT_DIR, "output")
     os.makedirs(output_dir, exist_ok=True)
     
     # -------------------------------------------------------------------------
-    # Paso 1: Carga o Generación de Traza Sísmica Anonimizada
+    # Paso 1: Carga o Generación de Traza Sísmica
     # -------------------------------------------------------------------------
     print("\n[Paso 1] Generando traza sísmica sintética con atenuación Q conocida...")
     survey_cfg = SeismicSurveyConfig(
-        survey_name="Survey_Area_Anonymized",
+        survey_name="Seismic_Survey_Area",
         line_name="Seismic_Line_01",
         well_name="Well_Test_01",
         sample_rate_s=0.002,

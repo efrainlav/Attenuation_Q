@@ -1,6 +1,5 @@
 # ==============================================================================
 # Módulo de Configuración - Parámetros de Atenuación Sísmica (Q) y MPD
-# Nota: Parámetros y nombres anonimizados para uso general y confidencialidad.
 # ==============================================================================
 
 from dataclasses import dataclass, field
@@ -9,7 +8,7 @@ import numpy as np
 
 @dataclass
 class SeismicSurveyConfig:
-    """Configuración general del levantamiento sísmico (Anonimizado)."""
+    """Configuración general del levantamiento sísmico y parámetros temporales."""
     survey_name: str = "Seismic_Survey_Area"
     line_name: str = "Seismic_Line_A"
     well_name: str = "Well_01"

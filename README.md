@@ -2,7 +2,7 @@
 
 Repositorio con el código desarrollado para la investigación y tesis de maestría sobre atenuación anelástica sísmica y estimación del **Factor de Calidad ($Q$)**, disponible en dos versiones:
 * **MATLAB (`1_Matlab_Code/`):** Código original de investigación aplicado a datos de superficie y pozo.
-* **Python (`3_Python_Code/`):** Implementación modular, vectorizada y **completamente anonimizada**, con pruebas unitarias y script demostrativo autónomo.
+* **Python (`3_Python_Code/`):** Implementación modular, orientada a objetos y vectorizada, con suite de pruebas unitarias y script demostrativo autónomo.
 
 ---
 
@@ -16,7 +16,7 @@ Repositorio con el código desarrollado para la investigación y tesis de maestr
    - [Paso 3: Descomposición Matching Pursuit (MPD) y Análisis Tiempo-Frecuencia](#paso-3-descomposición-matching-pursuit-mpd-y-análisis-tiempo-frecuencia)
    - [Paso 4: Modelado de Curvas Teóricas de Atenuación y Ganancia ($Q$)](#paso-4-modelado-de-curvas-teóricas-de-atenuación-y-ganancia-q)
    - [Paso 5: Cálculo e Inversión de $Q$ sobre Datos Sísmicos Reales](#paso-5-cálculo-e-inversión-de-q-sobre-datos-sísmicos-reales)
-5. [Implementación en Python (Anonimizada)](#-implementación-en-python-anonimizada)
+5. [Implementación en Python](#-implementación-en-python)
 6. [Diagrama del Pipeline](#-diagrama-del-pipeline)
 7. [Datos y Almacenamiento](#-datos-y-almacenamiento)
 8. [Requisitos y Dependencias](#-requisitos-y-dependencias)
@@ -81,9 +81,9 @@ Attenuation_Q/
 │   └── 5_Calculo_Datos_Q_1480.m         # Variante del cálculo de Q para análisis a nivel de horizonte/tiempo específico
 ├── 2_Data/
 │   └── Link_Data.txt                    # Enlace a Google Drive con los volúmenes SEG-Y y matrices .mat
-├── 3_Python_Code/                       # Implementación modular y anonimizada en Python
-│   ├── config.py                        # Configuración y parámetros geofísicos anonimizados
-│   ├── io_seismic.py                    # I/O para SEG-Y, .mat y generador de trazas sintéticas con atenuación
+├── 3_Python_Code/                       # Implementación modular y vectorizada en Python
+│   ├── config.py                        # Configuración y parámetros geofísicos
+│   ├── io_seismic.py                    # I/O para SEG-Y, .mat y generador de trazas sintéticas
 │   ├── morlet_dictionary.py             # Generación vectorizada del diccionario de Morlet (3D)
 │   ├── matching_pursuit.py              # Algoritmo MPD mediante atributos complejos de Hilbert
 │   ├── q_theoretical.py                 # Curvas analíticas Beta(X, Q) y ganancia estabilizada de Wang
@@ -109,6 +109,11 @@ Attenuation_Q/
   4. Genera gráficos de control de calidad mediante wiggle plots (`wiggle`) y gráficas de amplitud vs. tiempo.
   5. Guarda los resultados en archivos `.mat` (`Traza_1000.mat`, `QUI_07_17.mat`, `QUI_07_18.mat`).
 
+<p align="center">
+  <img src="assets/images/01_seismic_trace_qc.png" alt="Control de Calidad de Datos Sísmicos: Traza, Sección Wiggle y Espectro de Amplitud" width="95%" />
+</p>
+<p align="center"><em>Figura 1: Control de calidad de la información sísmica. (A) Traza sísmica individual en tiempo; (B) Despliegue en Wiggle con relleno positivo de una sección/gather; (C) Espectro de amplitud espectral en decibelios (dB).</em></p>
+
 ---
 
 ### Paso 2: Generación del Diccionario de Ondículas de Morlet
@@ -122,6 +127,11 @@ Attenuation_Q/
   * Ventana temporal: $[-0.5\text{ s}, +0.5\text{ s}]$ con tasa de muestreo de $2\text{ ms}$ ($ns=500$) o $1\text{ ms}$ ($ns=1000$).
   * Parámetro de ciclos de la ondícula: $k = 0.2$.
 * **Salida:** Archivos matriciales `diccionario_Qui_07_18_0_198.mat` o `diccionario_VSP_QF5.mat`, con visualización volumétrica de cortes con `slice`.
+
+<p align="center">
+  <img src="assets/images/02_morlet_wavelet_dictionary.png" alt="Diccionario de Ondículas de Morlet: Variación en Frecuencia, Fase y Huella Tiempo-Frecuencia" width="95%" />
+</p>
+<p align="center"><em>Figura 2: Diccionario de ondículas de Morlet. (A) Ondículas reales para frecuencias crecientes a fase constante; (B) Ondículas rotadas en fase (-90° a +90°); (C) Envolvente de energía espectral del átomo en el plano tiempo-frecuencia.</em></p>
 
 ---
 
@@ -140,6 +150,11 @@ Attenuation_Q/
   4. Genera la distribución de tiempo-frecuencia libre de artefactos mediante `TimeFreqDistElm` o `TimeFreqDistElmVSP`.
   5. Despliega los espectrogramas resultantes mediante `imagesc` con mapa de color `jet`.
 
+<p align="center">
+  <img src="assets/images/03_mpd_decomposition_and_tfd.png" alt="Descomposición MPD: Traza Modelada, Convergencia Residual y Distribución Tiempo-Frecuencia" width="95%" />
+</p>
+<p align="center"><em>Figura 3: Descomposición Matching Pursuit (MPD). (A) Traza original vs traza modelada; (B) Convergencia logarítmica de energía residual vs iteración; (C) Señal residual no explicada; (D) Distribución tiempo-frecuencia de alta resolución libre de interferencias cruzadas.</em></p>
+
 ---
 
 ### Paso 4: Modelado de Curvas Teóricas de Atenuación y Ganancia ($Q$)
@@ -152,6 +167,11 @@ Attenuation_Q/
   2. Calcula la matriz teórica de atenuación: $\text{BetaQ}(X, Q) = \exp\left(-\frac{2\pi X}{2Q}\right)$.
   3. Modela la ganancia estabilizada aplicando el límite $G_{\lim} = 20\text{ dB}$ (parámetro de estabilización de Wang).
   4. Genera figuras de control que ilustran el comportamiento de la ganancia en función de $Q$ y guarda la base teórica en `Teorico_Q.mat`.
+
+<p align="center">
+  <img src="assets/images/04_q_theoretical_curves.png" alt="Modelado Teórico de Decaimiento Espectral y Ganancias Estabilizadas de Wang" width="90%" />
+</p>
+<p align="center"><em>Figura 4: Modelado analítico de atenuación. (A) Curvas teóricas de decaimiento espectral Beta(X, Q) para distintos factores Q; (B) Curvas de compensación de ganancia estabilizada según la formulación de Wang.</em></p>
 
 ---
 
@@ -170,15 +190,20 @@ Attenuation_Q/
      * Identifica el valor óptimo: `[Qcalculado, timeloc] = min(valores)`.
   5. Grafica las curvas de desajuste, la ganancia observada y el $Q$ óptimo obtenido.
 
+<p align="center">
+  <img src="assets/images/05_q_inversion_workflow.png" alt="Inversión del Factor de Calidad Q: Isolíneas Chi, Ajuste de Ganancia y Minimización Residual" width="95%" />
+</p>
+<p align="center"><em>Figura 5: Inversión del factor Q sobre datos. (A) Amplitudes normalizadas integradas a lo largo de isolíneas Chi; (B) Ajuste de la ganancia observada frente a la teórica óptima; (C) Función objetivo residual evidenciando el mínimo global de Q.</em></p>
+
 ---
 
-## 🐍 Implementación en Python (Anonimizada)
+## 🐍 Implementación en Python
 
-En la carpeta [`3_Python_Code/`](file:///Users/efrainlav/Attenuation_Q/3_Python_Code/) se incluye una versión completamente refactorizada en Python, diseñada para ser modular, eficiente y **anonimizada**:
+En la carpeta [`3_Python_Code/`](file:///Users/efrainlav/Attenuation_Q/3_Python_Code/) se incluye una versión completamente refactorizada en Python, diseñada para ser modular, eficiente y portable:
 
-* **Anonimización total:** Se han retirado nombres específicos de campos petroleros, áreas de estudio, identificadores de pozos y líneas sísmicas propietarias, reemplazándolos por abstracciones estándar (`Survey_Area`, `Seismic_Line_A`, `Well_01`, etc.) configurables desde [`config.py`](file:///Users/efrainlav/Attenuation_Q/3_Python_Code/config.py).
-* **Independencia de datos propietarios:** Incluye un generador de trazas sintéticas realistas con modelado de atenuación anelástica $Q$ explícita en [`io_seismic.py`](file:///Users/efrainlav/Attenuation_Q/3_Python_Code/io_seismic.py).
-* **Demostración integral (End-to-End):** Puede ejecutarse de forma inmediata sin necesidad de archivos externos:
+* **Arquitectura Modular:** Configuración centralizada mediante dataclasses en [`config.py`](file:///Users/efrainlav/Attenuation_Q/3_Python_Code/config.py) para fácil ajuste de parámetros sísmicos y de procesamiento.
+* **Generador de Señales Integrado:** Incluye simulación analítica de trazas sísmicas con reflectores y atenuación anelástica $Q$ explícita en [`io_seismic.py`](file:///Users/efrainlav/Attenuation_Q/3_Python_Code/io_seismic.py), permitiendo evaluar y validar algoritmos sin dependencias externas.
+* **Demostración integral (End-to-End):** Script autónomo que ejecuta y grafica el flujo completo en un solo comando:
   ```bash
   python3 3_Python_Code/pipeline_demo.py
   ```

@@ -1,6 +1,5 @@
 """
 Paquete Python para Estimación del Factor de Calidad Sísmico (Q) mediante Matching Pursuit Decomposition (MPD).
-Todos los nombres de proyectos, áreas y líneas han sido anonimizados.
 """
 
 from .config import (
