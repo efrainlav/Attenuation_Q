@@ -1,8 +1,9 @@
 # Estimación del Factor de Calidad Sísmico ($Q$) mediante Descomposición Matching Pursuit (MPD)
 
-Repositorio con el código desarrollado para la investigación y tesis de maestría sobre atenuación anelástica sísmica y estimación del **Factor de Calidad ($Q$)**, disponible en dos versiones:
+Repositorio con el código desarrollado para la investigación y tesis de maestría sobre atenuación anelástica sísmica y estimación del **Factor de Calidad ($Q$)**, disponible en tres modalidades:
 * **MATLAB (`1_Matlab_Code/`):** Código original de investigación aplicado a datos de superficie y pozo.
 * **Python (`3_Python_Code/`):** Implementación modular, orientada a objetos y vectorizada, con suite de pruebas unitarias y script demostrativo autónomo.
+* **Jupyter Notebooks (`4_Notebooks/`):** Cuadernos interactivos (`.ipynb`) paso a paso por cada etapa del flujo, con teoría, código y gráficos pre-renderizados.
 
 ---
 
@@ -17,10 +18,11 @@ Repositorio con el código desarrollado para la investigación y tesis de maestr
    - [Paso 4: Modelado de Curvas Teóricas de Atenuación y Ganancia ($Q$)](#paso-4-modelado-de-curvas-teóricas-de-atenuación-y-ganancia-q)
    - [Paso 5: Cálculo e Inversión de $Q$ sobre Datos Sísmicos Reales](#paso-5-cálculo-e-inversión-de-q-sobre-datos-sísmicos-reales)
 5. [Implementación en Python](#-implementación-en-python)
-6. [Diagrama del Pipeline](#-diagrama-del-pipeline)
-7. [Datos y Almacenamiento](#-datos-y-almacenamiento)
-8. [Requisitos y Dependencias](#-requisitos-y-dependencias)
-9. [Consideraciones de Ejecución](#-consideraciones-de-ejecución)
+6. [Notebooks Interactivos por Etapa](#-notebooks-interactivos-por-etapa)
+7. [Diagrama del Pipeline](#-diagrama-del-pipeline)
+8. [Datos y Almacenamiento](#-datos-y-almacenamiento)
+9. [Requisitos y Dependencias](#-requisitos-y-dependencias)
+10. [Consideraciones de Ejecución](#-consideraciones-de-ejecución)
 
 ---
 
@@ -92,6 +94,13 @@ Attenuation_Q/
 │   ├── test_pipeline.py                 # Pruebas unitarias matemáticas y funcionales
 │   ├── requirements.txt                 # Dependencias (numpy, scipy, matplotlib)
 │   └── README.md                        # Documentación detallada del módulo en Python
+├── 4_Notebooks/                         # Cuadernos interactivos Jupyter (.ipynb) por etapa
+│   ├── 01_Carga_y_Control_Calidad_Datos.ipynb
+│   ├── 02_Diccionario_Ondiculas_Morlet.ipynb
+│   ├── 03_Descomposicion_Matching_Pursuit_MPD.ipynb
+│   ├── 04_Modelado_Teorico_Atenuacion_Q.ipynb
+│   ├── 05_Estimacion_e_Inversion_Q.ipynb
+│   └── README.md                        # Guía de ejecución interactiva de los notebooks
 └── README.md                            # Documentación técnica general
 ```
 
@@ -211,6 +220,24 @@ En la carpeta [`3_Python_Code/`](file:///Users/efrainlav/Attenuation_Q/3_Python_
   ```bash
   python3 -m unittest 3_Python_Code/test_pipeline.py
   ```
+
+---
+
+## 📓 Notebooks Interactivos por Etapa
+
+Para facilitar la exploración visual, análisis paso a paso y fines educativos, la carpeta [`4_Notebooks/`](file:///Users/efrainlav/Attenuation_Q/4_Notebooks/) contiene 5 cuadernos de Jupyter (`.ipynb`) completamente funcionales y con gráficos pre-renderizados:
+
+1. [`01_Carga_y_Control_Calidad_Datos.ipynb`](file:///Users/efrainlav/Attenuation_Q/4_Notebooks/01_Carga_y_Control_Calidad_Datos.ipynb): Carga de datos sísmicos, series temporales, despliegue en Wiggle y espectro de amplitud FFT.
+2. [`02_Diccionario_Ondiculas_Morlet.ipynb`](file:///Users/efrainlav/Attenuation_Q/4_Notebooks/02_Diccionario_Ondiculas_Morlet.ipynb): Construcción del tensor 3D de ondículas de Morlet y análisis de variaciones en frecuencia y fase.
+3. [`03_Descomposicion_Matching_Pursuit_MPD.ipynb`](file:///Users/efrainlav/Attenuation_Q/4_Notebooks/03_Descomposicion_Matching_Pursuit_MPD.ipynb): Algoritmo voraz MPD con atributos de Hilbert, convergencia de energía residual y espectrograma TF continuo.
+4. [`04_Modelado_Teorico_Atenuacion_Q.ipynb`](file:///Users/efrainlav/Attenuation_Q/4_Notebooks/04_Modelado_Teorico_Atenuacion_Q.ipynb): Modelado analítico de atenuación anelástica y catálogo de ganancias estabilizadas de Wang.
+5. [`05_Estimacion_e_Inversion_Q.ipynb`](file:///Users/efrainlav/Attenuation_Q/4_Notebooks/05_Estimacion_e_Inversion_Q.ipynb): Proyección sobre isolíneas Chi ($f \cdot t$), cálculo de ganancia real y minimización $L_1$ para estimar $Q$.
+
+Para ejecutarlos de forma interactiva:
+```bash
+cd 4_Notebooks
+jupyter notebook
+```
 
 ---
 
