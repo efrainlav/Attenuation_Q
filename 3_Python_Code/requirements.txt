@@ -1,0 +1,5 @@
+numpy>=1.22.0
+scipy>=1.8.0
+matplotlib>=3.5.0
+# segyio es opcional, requerido únicamente para lectura directa de archivos binarios SEG-Y:
+# segyio>=1.9.0

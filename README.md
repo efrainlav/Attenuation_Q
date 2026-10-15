@@ -1,6 +1,8 @@
 # Estimación del Factor de Calidad Sísmico ($Q$) mediante Descomposición Matching Pursuit (MPD)
 
-Repositorio con el código en **MATLAB** desarrollado para la investigación y tesis de maestría sobre atenuación anelástica sísmica y estimación del **Factor de Calidad ($Q$)**, aplicado a datos sísmicos de superficie (líneas sísmicas 2D de la zona de Quifa: `QUI-07-17` y `QUI-07-18`) y registros de pozo / sísmica vertical (VSP).
+Repositorio con el código desarrollado para la investigación y tesis de maestría sobre atenuación anelástica sísmica y estimación del **Factor de Calidad ($Q$)**, disponible en dos versiones:
+* **MATLAB (`1_Matlab_Code/`):** Código original de investigación aplicado a datos de superficie y pozo.
+* **Python (`3_Python_Code/`):** Implementación modular, vectorizada y **completamente anonimizada**, con pruebas unitarias y script demostrativo autónomo.
 
 ---
 
@@ -14,10 +16,11 @@ Repositorio con el código en **MATLAB** desarrollado para la investigación y t
    - [Paso 3: Descomposición Matching Pursuit (MPD) y Análisis Tiempo-Frecuencia](#paso-3-descomposición-matching-pursuit-mpd-y-análisis-tiempo-frecuencia)
    - [Paso 4: Modelado de Curvas Teóricas de Atenuación y Ganancia ($Q$)](#paso-4-modelado-de-curvas-teóricas-de-atenuación-y-ganancia-q)
    - [Paso 5: Cálculo e Inversión de $Q$ sobre Datos Sísmicos Reales](#paso-5-cálculo-e-inversión-de-q-sobre-datos-sísmicos-reales)
-5. [Diagrama del Pipeline](#-diagrama-del-pipeline)
-6. [Datos y Almacenamiento](#-datos-y-almacenamiento)
-7. [Requisitos y Dependencias](#-requisitos-y-dependencias)
-8. [Consideraciones de Ejecución](#-consideraciones-de-ejecución)
+5. [Implementación en Python (Anonimizada)](#-implementación-en-python-anonimizada)
+6. [Diagrama del Pipeline](#-diagrama-del-pipeline)
+7. [Datos y Almacenamiento](#-datos-y-almacenamiento)
+8. [Requisitos y Dependencias](#-requisitos-y-dependencias)
+9. [Consideraciones de Ejecución](#-consideraciones-de-ejecución)
 
 ---
 
@@ -78,7 +81,18 @@ Attenuation_Q/
 │   └── 5_Calculo_Datos_Q_1480.m         # Variante del cálculo de Q para análisis a nivel de horizonte/tiempo específico
 ├── 2_Data/
 │   └── Link_Data.txt                    # Enlace a Google Drive con los volúmenes SEG-Y y matrices .mat
-└── README.md                            # Documentación técnica del proyecto
+├── 3_Python_Code/                       # Implementación modular y anonimizada en Python
+│   ├── config.py                        # Configuración y parámetros geofísicos anonimizados
+│   ├── io_seismic.py                    # I/O para SEG-Y, .mat y generador de trazas sintéticas con atenuación
+│   ├── morlet_dictionary.py             # Generación vectorizada del diccionario de Morlet (3D)
+│   ├── matching_pursuit.py              # Algoritmo MPD mediante atributos complejos de Hilbert
+│   ├── q_theoretical.py                 # Curvas analíticas Beta(X, Q) y ganancia estabilizada de Wang
+│   ├── q_estimation.py                  # Extracción de isolíneas Chi, cálculo de ganancia e inversión de Q
+│   ├── pipeline_demo.py                 # Script ejecutable end-to-end con datos sintéticos y QC
+│   ├── test_pipeline.py                 # Pruebas unitarias matemáticas y funcionales
+│   ├── requirements.txt                 # Dependencias (numpy, scipy, matplotlib)
+│   └── README.md                        # Documentación detallada del módulo en Python
+└── README.md                            # Documentación técnica general
 ```
 
 ---
@@ -155,6 +169,23 @@ Attenuation_Q/
      * Calcula la norma residual $L_1$: $\text{valores}(Q) = \sum |\text{Gan\_Teorica}(:, Q) - \text{Gan\_datos}|$.
      * Identifica el valor óptimo: `[Qcalculado, timeloc] = min(valores)`.
   5. Grafica las curvas de desajuste, la ganancia observada y el $Q$ óptimo obtenido.
+
+---
+
+## 🐍 Implementación en Python (Anonimizada)
+
+En la carpeta [`3_Python_Code/`](file:///Users/efrainlav/Attenuation_Q/3_Python_Code/) se incluye una versión completamente refactorizada en Python, diseñada para ser modular, eficiente y **anonimizada**:
+
+* **Anonimización total:** Se han retirado nombres específicos de campos petroleros, áreas de estudio, identificadores de pozos y líneas sísmicas propietarias, reemplazándolos por abstracciones estándar (`Survey_Area`, `Seismic_Line_A`, `Well_01`, etc.) configurables desde [`config.py`](file:///Users/efrainlav/Attenuation_Q/3_Python_Code/config.py).
+* **Independencia de datos propietarios:** Incluye un generador de trazas sintéticas realistas con modelado de atenuación anelástica $Q$ explícita en [`io_seismic.py`](file:///Users/efrainlav/Attenuation_Q/3_Python_Code/io_seismic.py).
+* **Demostración integral (End-to-End):** Puede ejecutarse de forma inmediata sin necesidad de archivos externos:
+  ```bash
+  python3 3_Python_Code/pipeline_demo.py
+  ```
+* **Suite de Pruebas Unitarias:** Validación matemática del diccionario de Morlet, cálculo de energía, catálogo teórico y descomposición MPD:
+  ```bash
+  python3 -m unittest 3_Python_Code/test_pipeline.py
+  ```
 
 ---
 
